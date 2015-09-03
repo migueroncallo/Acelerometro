@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Acelerometro</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="delay">
+        <item>Normal</item>
+        <item>Game</item>
+        <item>Fastest</item>
+    </string-array>
+    <string-array name="type">
+        <item>Accelerometer</item>
+        <item>Linear Accelerometer</item>
+    </string-array>
+</resources>
