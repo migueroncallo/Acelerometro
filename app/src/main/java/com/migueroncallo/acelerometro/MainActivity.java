@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
 
     private Button start,stop;
+    private int sensordelay,sensortype;
     private SensorManager mSensorManager;
     private Sensor mAcelSensor;
     private TextView textX, textY, textZ;
@@ -33,15 +35,60 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Spinner spinnerdelay= (Spinner) findViewById(R.id.spinnerdelay);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.delay,R.layout.support_simple_spinner_dropdown_item);
         spinnerdelay.setAdapter(adapter);
+        spinnerdelay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+                switch (position){
+                    case 0:
+                        sensordelay=SensorManager.SENSOR_DELAY_NORMAL;
+                        break;
+                    case 1:
+                        sensordelay=SensorManager.SENSOR_DELAY_GAME;
+                        break;
+                    case 2:
+                        sensordelay=SensorManager.SENSOR_DELAY_FASTEST;
+                        break;
+
+
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         Spinner spinnertype= (Spinner) findViewById(R.id.spinnertype);
         ArrayAdapter<CharSequence> adapter1= ArrayAdapter.createFromResource(this, R.array.type, R.layout.support_simple_spinner_dropdown_item);
         spinnertype.setAdapter(adapter1);
+        spinnertype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position){
+                    case 0:
+                        sensortype=Sensor.TYPE_ACCELEROMETER;
+                        break;
+                    case 1:
+                        sensortype=Sensor.TYPE_LINEAR_ACCELERATION;
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startCapture(MainActivity.this);
+                startCapture(MainActivity.this,sensortype,sensordelay);
 
             }
         });
@@ -60,11 +107,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-    public void startCapture(Context context){
+    public void startCapture(Context context, int type,int delay){
 
         mSensorManager= (SensorManager) getSystemService(context.SENSOR_SERVICE);
-        mAcelSensor= mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this,mAcelSensor,SensorManager.SENSOR_DELAY_NORMAL);
+        mAcelSensor= mSensorManager.getDefaultSensor(type);
+        mSensorManager.registerListener(this,mAcelSensor,delay);
 
     }
 
